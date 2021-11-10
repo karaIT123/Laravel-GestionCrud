@@ -31,14 +31,16 @@ class PostsController extends Controller
      */
     public function create()
     {
-        return view('posts.create');
+        $post = new post();
+        $category = DB::table('categories')->pluck('name','id');
+        return view('posts.create',compact('post','category'));
     }
 
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|\Illuminate\Routing\Redirector
      */
     public function store(Request $request)
     {

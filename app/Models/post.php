@@ -9,7 +9,7 @@ use Illuminate\Support\Str;
 
 class post extends Model
 {
-    protected $fillable = (['title','slug','content','online']);
+    protected $fillable = (['title','slug','content','online','category_id']);
 
     public function category(){
         return $this->belongsTo('App\Models\category');
@@ -29,9 +29,13 @@ class post extends Model
     public function setSlugAttribute($value)
     {
         if(empty($value)){
-            $this->attributes['slug'] = Str::slug($this->title);;
+            return $this->attributes['slug'] = Str::slug($this->title);
+
+            #dd($this->attributes['slug']);
         }
 
+        return $this->attributes['slug'] = $value;
+        #dd($value);
     }
 
     public function getDates()

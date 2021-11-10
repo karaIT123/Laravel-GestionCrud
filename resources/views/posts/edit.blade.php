@@ -22,7 +22,6 @@
         {{ Form::label('content', 'En ligne ?', ['class' => 'form-label']) }}
         <br/>
 
-
         {{ Form::submit('Envoyer',['class' => 'btn btn-primary mt-2'] ) }}
 
     {{ Form::close() }}

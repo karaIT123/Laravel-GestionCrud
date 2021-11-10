@@ -1,4 +1,15 @@
-{{ Form::open(array('method' => 'put', 'url' => route('news.update',$post))) }}
+<?php
+    if(isset($post->id))
+        {
+            $options = ['method' => 'put', 'url' => route('news.update',$post)];
+        }
+    else
+        {
+            $options = ['method' => 'post', 'url' => route('news.store')];
+        }
+?>
+
+{{ Form::open($options) }}
 
 {{ Form::label('title', 'Titre', ['class' => 'form-label']) }}
 {{ Form::text('title', $post->title, ['class' => 'form-control']) }}
