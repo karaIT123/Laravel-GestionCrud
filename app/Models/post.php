@@ -11,13 +11,19 @@ class post extends Model
 {
     protected $fillable = (['title','slug','content','online','category_id']);
 
+    public function tags()
+    {
+        return $this->belongsToMany('App\models\tag');
+    }
+
     public function category(){
         return $this->belongsTo('App\Models\category');
     }
 
     public function scopePublished($query)
     {
-        return $query->where('online',true)->whereRaw('created_at < NOW()');
+        return $query->where('online',true);
+        //return $query->where('online',true)->whereRaw('created_at < NOW()');
         // return $query->where('online',true)->where('created_at', '<', DB::raw('NOW()'));
     }
 

@@ -20,6 +20,9 @@
 {{ Form::label('category_id', 'Catégorie', ['class' => 'form-label']) }}
 {{ Form::select('category_id', $category, $post->category_id, ['class' => 'form-control']) }}
 
+{{ Form::label('tags[]', 'Tags', ['class' => 'form-label']) }}
+{{ Form::select('tags[]', DB::table('tags')->pluck('name','id'), $post->tags->pluck('id'), ['class' => 'form-control', 'multiple' => true]) }}
+
 {{ Form::label('content', 'Contenu', ['class' => 'form-label']) }}
 {{ Form::textarea('content', $post->content, ['class' => 'form-control']) }}
 

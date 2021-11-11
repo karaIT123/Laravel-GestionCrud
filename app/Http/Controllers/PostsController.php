@@ -6,6 +6,7 @@ use App\Models\category;
 use App\Models\post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use function PHPUnit\Framework\isEmpty;
 
 class PostsController extends Controller
 {
@@ -71,6 +72,7 @@ class PostsController extends Controller
     {
         $post = post::findOrFail($id);
         $category = DB::table('categories')->pluck('name','id');
+        #dd($post->tags->pluck('name','id'));
         return view('posts.edit', compact('post','category'));
     }
 
@@ -83,12 +85,21 @@ class PostsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //dd($request->all());
+        #dd($request->all());
+        #dd($request->get('online'));
+        $online = $request->get('online');
+        #dd($online);
         $post = post::findOrFail($id);
+        if($online == null)
+        {   #die('null');
+            $post->online = 0;
+            #dd($post->online);
+        }
+        #die('not null');
+        $post->tags()->sync($request->get('tags'));
         $post->update($request->all());
 
         return redirect(route('news.edit',$id));
-
     }
 
     /**
