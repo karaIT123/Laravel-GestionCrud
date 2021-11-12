@@ -47,6 +47,11 @@ Route::get('r/{id}',[LinksController::class,'show'])->where('id','[0-9]+');
 
 route::resource('news','App\Http\Controllers\PostsController');
 
+
+route::group(['namespace' => 'Admin', 'prefix' => 'admin'], function(){
+    route::resource('posts',\App\Http\Controllers\Admin\PostsController::class);
+});
+
 Route::get('/', function () {
     return view('welcome');
 });

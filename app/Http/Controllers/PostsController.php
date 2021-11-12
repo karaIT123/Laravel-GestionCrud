@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 
 class PostsController extends Controller
@@ -27,6 +28,10 @@ class PostsController extends Controller
         //$posts = post::published()->get();
         //$posts = post::published()->get();
         //$posts->load('category');
+
+        #Session::put('key.a',1);
+        #Session::put('key.c',[1,2]);
+        #dd(Session::all());
 
         $posts = post::with('category')->published()->get();
         return view ('posts.index', compact('posts'));
@@ -108,10 +113,12 @@ class PostsController extends Controller
        /*$this->validate($request, [
             'title' => 'required|min:5',
             'content' => 'required|min:10'
-        ]);*/
-        /*$this->validate($request, post::$rules);*/
+        ]);
+        $this->validate($request, post::$rules);*/
 
         $post->update($request->all());
+        /*Session::flash('success',"L'article a été modifier avec success");
+        return redirect(route('news.edit',$id))->with('success','L\'article a été modifier avec success');*/
         return redirect(route('news.edit',$id));
 
         /*$validator = Validator::make($request->all(), [
