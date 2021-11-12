@@ -9,7 +9,12 @@ use Illuminate\Support\Str;
 
 class post extends Model
 {
-    protected $fillable = (['title','slug','content','online','category_id']);
+    protected $fillable = (['title','slug','content','online','category_id','tags_list']);
+
+    public static $rules = [
+        'title' => 'required|min:5',
+        'content' => 'required|min:10'
+    ];
 
     public function tags()
     {
@@ -22,7 +27,7 @@ class post extends Model
 
     public function scopePublished($query)
     {
-        return $query->where('online',true);
+        return $query->where('online',true)->orderBy('id','DESC');
         //return $query->where('online',true)->whereRaw('created_at < NOW()');
         // return $query->where('online',true)->where('created_at', '<', DB::raw('NOW()'));
     }
@@ -30,6 +35,26 @@ class post extends Model
     public function scopeSearchByTitle($query, $title)
     {
         return $query->where('title', 'LIKE', '%' . $title . '%');
+    }
+
+    /*public function getCategoryIdAttribute()
+    {
+        #dd($this->attributes['category_id']);
+    }
+
+    public function getTagsListAttribute(){
+        #dd($this->tags->pluck('id'));
+        #die('ok');
+        if($this->id)
+        {
+            return $this->tags->pluck('id');
+        }
+    }*/
+
+    public function setTagsListAttribute($value){
+
+
+        $this->tags()->sync($value);
     }
 
     public function setSlugAttribute($value)

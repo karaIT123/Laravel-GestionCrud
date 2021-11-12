@@ -2,18 +2,25 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\category;
+use App\Http\Requests\CreatePostRequest;
+use App\Http\Requests\EditPostRequest;
 use App\Models\post;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\DB;
-use function PHPUnit\Framework\isEmpty;
+use Illuminate\Support\Facades\Validator;
 
 class PostsController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\Response
+     * @return Application|Factory|View
      */
     public function index()
     {
@@ -28,7 +35,7 @@ class PostsController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\Response
+     * @return Application|Factory|View
      */
     public function create()
     {
@@ -40,21 +47,21 @@ class PostsController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|\Illuminate\Routing\Redirector
+     * @param CreatePostRequest $request
+     * @return Application|RedirectResponse|Redirector
      */
-    public function store(Request $request)
+    public function store(CreatePostRequest $request)
     {
         $post = post::create($request->all());
+        $post->tags()->sync($request->get('tags'));
         return redirect(route('news.edit',$post));
-
     }
 
     /**
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function show($id)
     {
@@ -66,7 +73,7 @@ class PostsController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\Response
+     * @return Application|Factory|View
      */
     public function edit($id)
     {
@@ -79,11 +86,11 @@ class PostsController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
      * @param  int  $id
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|\Illuminate\Routing\Redirector
+     * @return Application|RedirectResponse|Response|Redirector
      */
-    public function update(Request $request, $id)
+    public function update(EditPostRequest $request, $id)
     {
         #dd($request->all());
         #dd($request->get('online'));
@@ -97,16 +104,35 @@ class PostsController extends Controller
         }
         #die('not null');
         $post->tags()->sync($request->get('tags'));
-        $post->update($request->all());
 
+       /*$this->validate($request, [
+            'title' => 'required|min:5',
+            'content' => 'required|min:10'
+        ]);*/
+        /*$this->validate($request, post::$rules);*/
+
+        $post->update($request->all());
         return redirect(route('news.edit',$id));
+
+        /*$validator = Validator::make($request->all(), [
+            'title' => 'required|min:5',
+            'content' => 'required|min:10'
+        ]);
+
+        if($validator->fails()){
+            return redirect(route('news.edit',$id))->withErrors($validator->errors());
+        }
+        else{
+            $post->update($request->all());
+            return redirect(route('news.edit',$id));
+        }*/
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function destroy($id)
     {

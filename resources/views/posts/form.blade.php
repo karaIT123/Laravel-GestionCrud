@@ -9,6 +9,8 @@
         }
 ?>
 
+@include('errors')
+
 {{ Form::open($options) }}
 
 {{ Form::label('title', 'Titre', ['class' => 'form-label']) }}
