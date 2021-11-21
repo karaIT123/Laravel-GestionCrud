@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\LinksController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PagesController;
@@ -29,11 +30,11 @@ Route::get('article/{slug}-{id}', ['as' => 'article',function ($slug,$id){
 }])->where('name','[a-zA-Z0-9\-]+')->where('id','[0-9]+');
 
 
-Route::group(['prefix' => 'admin', 'middleware' => 'ip'], function(){
+/*Route::group(['prefix' => 'admin', 'middleware' => 'ip'], function(){
     Route::get('bonjour', function(){
         return 'Bonjour';
     });
-});
+});*/
 
 Route::get('a-propos',[PagesController::class,'about']);
 
@@ -48,10 +49,18 @@ Route::get('r/{id}',[LinksController::class,'show'])->where('id','[0-9]+');
 route::resource('news','App\Http\Controllers\PostsController');
 
 
-route::group(['namespace' => 'Admin', 'prefix' => 'admin'], function(){
-    route::resource('posts',\App\Http\Controllers\Admin\PostsController::class);
+#\Illuminate\Support\Facades\Auth::routes();
+
+route::group(['namespace' => '\App\Http\Controllers\Admin', 'prefix' => 'admin'], function(){
+    route::resource('posts',PostsController::class);
 });
+
 
 Route::get('/', function () {
     return view('welcome');
 });
+
+Auth::routes();
+
+route::resource('postsadmin',\App\Http\Controllers\Admin\PostsController::class);
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

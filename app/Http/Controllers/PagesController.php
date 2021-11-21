@@ -12,5 +12,10 @@ class PagesController extends Controller
         $numbers = [1,2,3];
         return view('pages/about', compact('title', 'numbers'));
     }
+
+    public function contact()
+    {
+
+    }
 }
 

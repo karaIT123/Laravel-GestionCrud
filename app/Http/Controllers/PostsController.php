@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CreatePostRequest;
 use App\Http\Requests\EditPostRequest;
 use App\Models\post;
+use App\Models\User;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -12,12 +13,15 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Redirector;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 
 class PostsController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      *
@@ -32,6 +36,16 @@ class PostsController extends Controller
         #Session::put('key.a',1);
         #Session::put('key.c',[1,2]);
         #dd(Session::all());
+
+        //Manual connection
+        #$user = User::first();
+        #Auth::login($user);
+        #Auth::logout();
+
+        #User::create(['email' => 'user@example.com', 'password' => Hash::make('0000'), 'name' => 'Jhon']);
+        #Auth::attempt(['email' => 'user@example.com', 'password' => '0000']);
+        #dd(Auth::check());
+
 
         $posts = post::with('category')->published()->get();
         return view ('posts.index', compact('posts'));
