@@ -37,6 +37,7 @@ Route::get('article/{slug}-{id}', ['as' => 'article',function ($slug,$id){
 });*/
 
 Route::get('a-propos',[PagesController::class,'about']);
+Route::get('contact',[PagesController::class,'contact']);
 
 
 
